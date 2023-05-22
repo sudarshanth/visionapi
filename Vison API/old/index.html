@@ -1,0 +1,83 @@
+<html>
+	<title>Product Search Using Google Cloud Vision</title>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+		document.write("<script type='text/javascript' src='/static/main.js?v=" + Date.now() + "'></\script>");
+		document.write(
+    '<link rel="stylesheet" type="text/css" href="/static/main.css?v=' + Date.now() + '">');
+		</script>
+	</head>
+	<body>
+		<center>
+		<h1>Search Similar Images</h1>
+		<p>Click <a href="/catalog">index image</a> if you need to import csv files to index images.</p>
+		
+		<table id="formsTable" border="1">
+			<tr>
+				<td class="formColumn">
+					<p>
+						See how to get
+						<a href="https://cloud.google.com/iam/docs/creating-managing-service-account-keys#creating_service_account_keys">
+							json keys for service account.
+						</a>
+					</p>
+					<p>
+						Note that your service account should be authorized to call the API and fetch your gcs indexed images.
+					</p>
+					<form method="post" id="uploadForm" onsubmit="return processUploadForm();">
+						<div id="uploadFormTable">
+							<div>
+								<label for="securityKey">Service account json key</label>
+								<input id="securityKey" type="file" accept="text/*,application/json" onchange="uploadJsonKey(this);">
+							</div>
+							<div>
+								<label for="apiEndpoint">Endpoint</label>
+								<input type="text" id="apiEndpoint" class="longInput" value="https://vision.googleapis.com/v1"
+								onchange="toggleSubmitButton();">
+							</div>
+							<div>
+								<label for="uploadInput">Provide an image to search</label>
+								<input id="uploadInput" name="uploadedImage" accept="image/*" type="file" onchange="renderImage(this);" />
+							</div>
+							<div>
+								<label for="productSet">Product set path </label>
+								<input type="text" id="productSet" class="longInput" placeholder="i.e. projects/homegoods-test/locations/us-west1/productSets/set_id_1"
+								onchange="toggleSubmitButton();">
+							</div>
+							<div id="categoryRadios">
+								<label for="productCategory">Product category, i.e. homegoods or apparel</label>
+								<input type="text" id="productCategory" class="longInput" placeholder="i.e. homegoods or apparel" value="homegoods-v2"
+								onchange="toggleSubmitButton();">
+							</div>
+							<div>
+								<label for="maxItems">Number of items to return</label>
+								<input type="number" id="maxItems" min="1" max="200" value="10"
+								onchange="toggleSubmitButton();">
+							</div>
+							<div>
+								<label for="boundingPoly"> Bounding poly </label>
+								<input type="text" id="boundingPoly" class="longInput" placeholder="Click and move mouse on right side image to get bounding poly"	>
+							</div>
+							<div>
+								<input id="submit" type="submit" value="Find Similar Images" data-original="Find Similar Images" disabled/>
+							</div>
+						</div>
+					</form>
+				</td>
+				<td class="formColumn">
+					<div id="canvas" height="430" width="440"></canvas>
+				</td>
+			</tr>
+		</table>
+		<hr />
+		<div>
+			<p id="message"></p>
+		</div>
+		<div id="matched" class="imageContainer"></div>
+		</center>
+	</body>
+	<script>
+	  document.write("<script type='text/javascript' src='/static/draw.js?v=" + Date.now() + "'></\script>");
+	</script>
+</html>
